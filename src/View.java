@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class View extends JFrame{
 
@@ -55,7 +56,7 @@ public class View extends JFrame{
     public JComboBox<String> cmbBoxCacheSizeType;
     public JComboBox<String> cmbBoxMMSizeType;
     public JComboBox<String> cmbBoxReadType;
-    public JComboBox<String> cmbBoxContiguous;
+    public JComboBox<String> cmbBoxAddressType;
     public JComboBox<String> cmbBoxInputType;
 
     public JTextArea taProgramFlow;
@@ -80,8 +81,8 @@ public class View extends JFrame{
         setResizable(false);
 
         String[] optionsBlockOrWord = {"Blocks", "Words"};
-        String[] optionsLoadThroughOrNot = {"Load-Through", "Non Load-Through"};
-        String[] optionsContiguousOrNot = {"Contiguous", "Non Contiguous"};
+        String[] optionsLoadThroughOrNot = {"Non Load-Through", "Load-Through"};
+        String[] optionsContiguousOrNot = {"Non Contiguous", "Contiguous"};
         String[] optionsAddressOrBlock = {"Addresses", "Blocks"};
 
         //Title Panel
@@ -237,9 +238,9 @@ public class View extends JFrame{
         lblContiguous.setForeground(Color.BLACK);
         pnlLeft.add(lblContiguous);
 
-        cmbBoxContiguous = new JComboBox<>(optionsContiguousOrNot);
-        cmbBoxContiguous.setBounds(400, 135, 170, 25);
-        pnlLeft.add(cmbBoxContiguous);
+        cmbBoxAddressType = new JComboBox<>(optionsContiguousOrNot);
+        cmbBoxAddressType.setBounds(400, 135, 170, 25);
+        pnlLeft.add(cmbBoxAddressType);
 
         // Input Type
         lblInputType = new JLabel("Input Type");
@@ -431,14 +432,6 @@ public class View extends JFrame{
         taProgramFlow.setText("");
     }
 
-    public void addRowToTable(String[] row) {
-        tblModel.addRow(row);
-    }
-
-    public void setTable(String[][] cacheSnapshot){
-        for (String[] strings : cacheSnapshot) addRowToTable(strings);
-    }
-
     void addClearListener(ActionListener clearListener){
         btnClear.addActionListener(clearListener);
     }
@@ -451,4 +444,58 @@ public class View extends JFrame{
         btnSave.addActionListener(saveListener);
     }
 
+    public String getCacheSize () {return tfCacheSize.getText();}
+
+    public String getCacheSizeType () {return Objects.requireNonNull(cmbBoxCacheSizeType.getSelectedItem()).toString();}
+
+    public String getMMSize () {return tfMMSize.getText();}
+
+    public String getMMSizeType () {return Objects.requireNonNull(cmbBoxMMSizeType.getSelectedItem()).toString();}
+
+    public String getSetSize () {return tfSetSize.getText();}
+
+    public String getBlockSize () {return tfBlockSize.getText();}
+
+    public String getCacheAccTime () {return tfCacheAccTime.getText();}
+
+    public String getMemoryAccTime () {return tfMemoryAccTime.getText();}
+
+    public String getReadType () {return Objects.requireNonNull(cmbBoxReadType.getSelectedItem()).toString();}
+
+    public String getAddressType () {return Objects.requireNonNull(cmbBoxAddressType.getSelectedItem()).toString();}
+
+    public String getInputType () {return Objects.requireNonNull(cmbBoxInputType.getSelectedItem()).toString();}
+
+    public String getProgramFlow () {return taProgramFlow.getText();}
+
+    public void addRowToTable(String[] row) {
+        tblModel.addRow(row);
+    }
+
+    public void setTable(String[][] cacheSnapshot){
+        for (String[] strings : cacheSnapshot) addRowToTable(strings);
+    }
+
+    public void addRowToTable(int[] row) {
+        String[] rowString = {"", "", ""};
+        for (int i = 0; i < row.length; i++) {
+            rowString[i] = String.valueOf(row[i]);
+        }
+        tblModel.addRow(rowString);
+    }
+
+    public void setTable(int[][] cacheSnapshot){
+        for (int[] values : cacheSnapshot) addRowToTable(values);
+    }
+
+
+    public void setCacheHits(int res){lblCacheHitsRes.setText(String.valueOf(res));}
+
+    public void setCacheMisses(int res) {lblCacheMissesRes.setText(String.valueOf(res));}
+
+    public void setMissPenalty(int res) {lblMissPenaltyRes.setText(String.valueOf(res));}
+
+    public void setAveMemAccTime(int res) {lblAveMemAccTimeRes.setText(String.valueOf(res));}
+
+    public void setTotalMemAccTime(int res) {lblTotalMemAccTimeRes.setText(String.valueOf(res));}
 }
