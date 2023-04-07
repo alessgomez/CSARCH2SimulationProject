@@ -1,9 +1,9 @@
 package src;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-
-import static java.lang.Integer.parseInt;
+import java.awt.event.ActionListener;
 
 public class View extends JFrame{
 
@@ -64,10 +64,12 @@ public class View extends JFrame{
     public JScrollPane spSnapshot;
 
     public JButton btnSimulate;
-    public JButton btnReset;
+    public JButton btnClear;
     public JButton btnSave;
 
     public JTable tblSnapshot;
+
+    DefaultTableModel tblModel;
 
     public View () {
         setTitle("CSARCH2 Simulation Project");
@@ -266,10 +268,10 @@ public class View extends JFrame{
 
 
         // Reset
-        btnReset = new JButton("Reset");
-        btnReset.setBounds(120, 540, 200, 45);
-        btnReset.setFont(new Font("Arial", Font.BOLD, 16));
-        pnlLeft.add(btnReset);
+        btnClear = new JButton("Clear");
+        btnClear.setBounds(120, 540, 200, 45);
+        btnClear.setFont(new Font("Arial", Font.BOLD, 16));
+        pnlLeft.add(btnClear);
 
         // Simulate
         btnSimulate = new JButton("Simulate");
@@ -285,14 +287,10 @@ public class View extends JFrame{
         pnlRight.add(lblOutput);
 
         // snapshot
-        String[][] data = {
-                { "1", "1", "1" },
-                { "2", "2", "2" },
-                { "", "", "" }
-        };
-        String[] columnNames = {"Set", "Block", "Data"};
+        String[] colNames = {"Set", "Block", "Data"};
 
-        tblSnapshot = new JTable(data, columnNames);
+        tblModel = new DefaultTableModel(colNames, 0);
+        tblSnapshot = new JTable(tblModel);
         tblSnapshot.setEnabled(false);
 
         spSnapshot = new JScrollPane(tblSnapshot);
@@ -303,79 +301,79 @@ public class View extends JFrame{
         // Cache Hits
         lblCacheHits = new JLabel("Cache Hits");
         lblCacheHits.setFont(new Font("Arial", Font.BOLD, 16));
-        lblCacheHits.setBounds(280, 90, 100, 50);
+        lblCacheHits.setBounds(290, 90, 100, 50);
         lblCacheHits.setForeground(Color.BLACK);
         pnlRight.add(lblCacheHits);
 
         lblCacheHitsRes = new JLabel("5");
         lblCacheHitsRes.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblCacheHitsRes.setBounds(430, 90, 150, 50);
+        lblCacheHitsRes.setBounds(440, 90, 150, 50);
         lblCacheHitsRes.setForeground(Color.BLACK);
         pnlRight.add(lblCacheHitsRes);
 
         // Cache Misses
         lblCacheMisses = new JLabel("Cache Misses");
         lblCacheMisses.setFont(new Font("Arial", Font.BOLD, 16));
-        lblCacheMisses.setBounds(280, 140, 150, 50);
+        lblCacheMisses.setBounds(290, 140, 150, 50);
         lblCacheMisses.setForeground(Color.BLACK);
         pnlRight.add(lblCacheMisses);
 
         lblCacheMissesRes = new JLabel("5");
         lblCacheMissesRes.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblCacheMissesRes.setBounds(430, 140, 150, 50);
+        lblCacheMissesRes.setBounds(440, 140, 150, 50);
         lblCacheMissesRes.setForeground(Color.BLACK);
         pnlRight.add(lblCacheMissesRes);
 
         // Miss Penalty
         lblMissPenalty = new JLabel("Miss Penalty");
         lblMissPenalty.setFont(new Font("Arial", Font.BOLD, 16));
-        lblMissPenalty.setBounds(280, 190, 150, 50);
+        lblMissPenalty.setBounds(290, 190, 150, 50);
         lblMissPenalty.setForeground(Color.BLACK);
         pnlRight.add(lblMissPenalty);
 
         lblMissPenaltyRes = new JLabel("5");
         lblMissPenaltyRes.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblMissPenaltyRes.setBounds(430, 190, 150, 50);
+        lblMissPenaltyRes.setBounds(440, 190, 150, 50);
         lblMissPenaltyRes.setForeground(Color.BLACK);
         pnlRight.add(lblMissPenaltyRes);
 
         // Average Memory Access Time
         lblAveMemAccTime1 = new JLabel("Average Memory");
         lblAveMemAccTime1.setFont(new Font("Arial", Font.BOLD, 16));
-        lblAveMemAccTime1.setBounds(280, 240, 150, 50);
+        lblAveMemAccTime1.setBounds(290, 240, 150, 50);
         lblAveMemAccTime1.setForeground(Color.BLACK);
         pnlRight.add(lblAveMemAccTime1);
 
         lblAveMemAccTime2 = new JLabel("Access Time");
         lblAveMemAccTime2.setFont(new Font("Arial", Font.BOLD, 16));
-        lblAveMemAccTime2.setBounds(280, 260, 150, 50);
+        lblAveMemAccTime2.setBounds(290, 260, 150, 50);
         lblAveMemAccTime2.setForeground(Color.BLACK);
         pnlRight.add(lblAveMemAccTime2);
 
-        lblAveMemAccTime2 = new JLabel("5");
-        lblAveMemAccTime2.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblAveMemAccTime2.setBounds(430, 240, 150, 50);
-        lblAveMemAccTime2.setForeground(Color.BLACK);
-        pnlRight.add(lblAveMemAccTime2);
+        lblAveMemAccTimeRes = new JLabel("5.25");
+        lblAveMemAccTimeRes.setFont(new Font("Arial", Font.PLAIN, 16));
+        lblAveMemAccTimeRes.setBounds(440, 240, 150, 50);
+        lblAveMemAccTimeRes.setForeground(Color.BLACK);
+        pnlRight.add(lblAveMemAccTimeRes);
 
         // Total Memory Access Time
         lblTotalMemAccTime1 = new JLabel("Total Memory");
         lblTotalMemAccTime1.setFont(new Font("Arial", Font.BOLD, 16));
-        lblTotalMemAccTime1.setBounds(280, 310, 150, 50);
+        lblTotalMemAccTime1.setBounds(290, 310, 150, 50);
         lblTotalMemAccTime1.setForeground(Color.BLACK);
         pnlRight.add(lblTotalMemAccTime1);
 
         lblTotalMemAccTime2 = new JLabel("Access Time");
         lblTotalMemAccTime2.setFont(new Font("Arial", Font.BOLD, 16));
-        lblTotalMemAccTime2.setBounds(280, 330, 150, 50);
+        lblTotalMemAccTime2.setBounds(290, 330, 150, 50);
         lblTotalMemAccTime2.setForeground(Color.BLACK);
         pnlRight.add(lblTotalMemAccTime2);
 
-        lblTotalMemAccTime2 = new JLabel("5");
-        lblTotalMemAccTime2.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblTotalMemAccTime2.setBounds(430, 310, 150, 50);
-        lblTotalMemAccTime2.setForeground(Color.BLACK);
-        pnlRight.add(lblTotalMemAccTime2);
+        lblTotalMemAccTimeRes = new JLabel("5.25");
+        lblTotalMemAccTimeRes.setFont(new Font("Arial", Font.PLAIN, 16));
+        lblTotalMemAccTimeRes.setBounds(440, 310, 150, 50);
+        lblTotalMemAccTimeRes.setForeground(Color.BLACK);
+        pnlRight.add(lblTotalMemAccTimeRes);
 
         // Save To Text File
         btnSave = new JButton("Save to Text File");
@@ -383,12 +381,74 @@ public class View extends JFrame{
         btnSave.setFont(new Font("Arial", Font.BOLD, 16));
         pnlRight.add(btnSave);
 
+        // Hide Output
+        hideOutput();
+
         setVisible(true);
     }
 
+    public void showOutput() {
+        spSnapshot.setVisible(true);
+        lblCacheHits.setVisible(true);
+        lblCacheHitsRes.setVisible(true);
+        lblCacheMisses.setVisible(true);
+        lblCacheMissesRes.setVisible(true);
+        lblMissPenalty.setVisible(true);
+        lblMissPenaltyRes.setVisible(true);
+        lblAveMemAccTime1.setVisible(true);
+        lblAveMemAccTime2.setVisible(true);
+        lblAveMemAccTimeRes.setVisible(true);
+        lblTotalMemAccTime1.setVisible(true);
+        lblTotalMemAccTime2.setVisible(true);
+        lblTotalMemAccTimeRes.setVisible(true);
+        btnSave.setVisible(true);
+    }
 
-	public static void main(String[] args) {
-		View view = new View();
+    public void hideOutput() {
+        spSnapshot.setVisible(false);
+        lblCacheHits.setVisible(false);
+        lblCacheHitsRes.setVisible(false);
+        lblCacheMisses.setVisible(false);
+        lblCacheMissesRes.setVisible(false);
+        lblMissPenalty.setVisible(false);
+        lblMissPenaltyRes.setVisible(false);
+        lblAveMemAccTime1.setVisible(false);
+        lblAveMemAccTime2.setVisible(false);
+        lblAveMemAccTimeRes.setVisible(false);
+        lblTotalMemAccTime1.setVisible(false);
+        lblTotalMemAccTime2.setVisible(false);
+        lblTotalMemAccTimeRes.setVisible(false);
+        btnSave.setVisible(false);
+    }
 
-	}
+    public void clearInput() {
+        tfCacheSize.setText("");
+        tfMMSize.setText("");
+        tfSetSize.setText("");
+        tfBlockSize.setText("");
+        tfCacheAccTime.setText("");
+        tfMemoryAccTime.setText("");
+        taProgramFlow.setText("");
+    }
+
+    public void addRowToTable(String[] row) {
+        tblModel.addRow(row);
+    }
+
+    public void setTable(String[][] cacheSnapshot){
+        for (String[] strings : cacheSnapshot) addRowToTable(strings);
+    }
+
+    void addClearListener(ActionListener clearListener){
+        btnClear.addActionListener(clearListener);
+    }
+
+    void addSimulateListener(ActionListener simulateListener){
+        btnSimulate.addActionListener(simulateListener);
+    }
+
+    void addSaveListener(ActionListener saveListener){
+        btnSave.addActionListener(saveListener);
+    }
+
 }
