@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class View extends JFrame{
@@ -466,7 +468,24 @@ public class View extends JFrame{
 
     public String getInputType () {return Objects.requireNonNull(cmbBoxInputType.getSelectedItem()).toString();}
 
-    public String getProgramFlow () {return taProgramFlow.getText();}
+    public ArrayList<String[]> getProgramFlowContiguous() {
+        String text = taProgramFlow.getText();
+        String[] text_split = text.split("\n");
+        ArrayList<String[]> text_list = new ArrayList<>();
+        for (int i = 0; i < text_split.length; i++) {
+            String[] word_split = text_split[i].split("\\s+");
+            text_list.add(word_split);
+        }
+        return text_list;
+    }
+
+    public ArrayList<String> getProgramFlowNonContiguous() {
+        String text = taProgramFlow.getText();
+        String[] text_split = text.split("\n");
+        ArrayList<String> text_list = new ArrayList<>(Arrays.asList(text_split));
+        System.out.println(text_list);
+        return text_list;
+    }
 
     public void addRowToTable(String[] row) {
         tblModel.addRow(row);
@@ -488,7 +507,6 @@ public class View extends JFrame{
         for (int[] values : cacheSnapshot) addRowToTable(values);
     }
 
-
     public void setCacheHits(int res){lblCacheHitsRes.setText(String.valueOf(res));}
 
     public void setCacheMisses(int res) {lblCacheMissesRes.setText(String.valueOf(res));}
@@ -498,4 +516,5 @@ public class View extends JFrame{
     public void setAveMemAccTime(int res) {lblAveMemAccTimeRes.setText(String.valueOf(res));}
 
     public void setTotalMemAccTime(int res) {lblTotalMemAccTimeRes.setText(String.valueOf(res));}
+
 }
