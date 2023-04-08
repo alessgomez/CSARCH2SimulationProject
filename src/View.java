@@ -30,7 +30,7 @@ public class View extends JFrame{
     public JLabel lblMemoryAccTimeNS;
     public JLabel lblReadType;
     public JLabel lblProgramFlow;
-    public JLabel lblContiguous;
+    public JLabel lblMemoryType;
     public JLabel lblInputType;
     public JLabel lblOutput;
 
@@ -234,11 +234,11 @@ public class View extends JFrame{
         pnlLeft.add(cmbBoxReadType);
 
         // Address Type
-        lblContiguous = new JLabel("Address Type");
-        lblContiguous.setFont(new Font("Arial", Font.BOLD, 16));
-        lblContiguous.setBounds(400, 90, 150, 50);
-        lblContiguous.setForeground(Color.BLACK);
-        pnlLeft.add(lblContiguous);
+        lblMemoryType = new JLabel("Memory Type");
+        lblMemoryType.setFont(new Font("Arial", Font.BOLD, 16));
+        lblMemoryType.setBounds(400, 90, 150, 50);
+        lblMemoryType.setForeground(Color.BLACK);
+        pnlLeft.add(lblMemoryType);
 
         cmbBoxAddressType = new JComboBox<>(optionsContiguousOrNot);
         cmbBoxAddressType.setBounds(400, 135, 170, 25);
