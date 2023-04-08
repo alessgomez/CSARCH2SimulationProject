@@ -24,3 +24,8 @@ TODO:
     - convert mmsize and cmsize to words
     - parse program flow into an array list 
 5. Error checking?
+
+
+NOTE:
+1. Assumed address is in hex
+2. What does input type block mean for the program flow?

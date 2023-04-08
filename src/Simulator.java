@@ -9,9 +9,9 @@ public class Simulator {
     private final int cacheMemorySize; //in words
     private final int numOfCacheSets;
     private final ArrayList<String> programFlow;
-    private final int numOfCacheHits;
-    private final int numOfCacheMiss;
-    private final int[][] cacheData; //TODO: edit
+    private int numOfCacheHits;
+    private int numOfCacheMiss;
+    private final String[][] cacheData; //TODO: edit
     private final int[][] cacheAge;
     private final String inputType;
     private int numOfTagBits;
@@ -27,10 +27,19 @@ public class Simulator {
         this.numOfCacheHits = 0;
         this.numOfCacheMiss = 0;
         numOfCacheSets = cacheMemorySize / blockSize / setSize; 
-        this.cacheData = new int[numOfCacheSets][setSize]; //TODO: might change to arraylist of objects
+        this.cacheData = new String[numOfCacheSets][setSize]; //TODO: might change to arraylist of objects
         this.cacheAge = new int[numOfCacheSets][setSize]; 
         this.inputType = inputType;
         partitionMainMemoryAddress();
+        initializeCacheAge();
+    }
+
+    private void initializeCacheAge() {
+        for (int i = 0; i < cacheAge.length; i++)
+        {
+            for (int j = 0; j < cacheAge[i].length; j++)
+                cacheAge[i][j] = -1;
+        }
     }
 
     private void partitionMainMemoryAddress() {
@@ -47,11 +56,53 @@ public class Simulator {
 
     public void simulate() {
         int setNum;
+        int dataInd;
+        int LRUInd;
         for (int i = 0; i < programFlow.size(); i++)
         {
             // Step 1: Get mapping 
+            // Step 2: Check if data is in cache already
+                // Step 2.1: If yes, increase the age ONLY; Cache hit +=1
+                // Step 2.2: Else, find the index of SMALLEST age, change the data in that index and increment the CURRENT AGE; Cache miss += 1 
             setNum = getBlockSetAssociativeMapping(programFlow.get(i));
+            dataInd = findCacheData(programFlow.get(i), setNum);
+
+            if (dataInd != -1)
+            {
+                cacheAge[setNum][dataInd]++;
+                numOfCacheHits++;
+            }
+
+            else 
+            {
+                LRUInd = getLRUBlockIndex(setNum);
+                cacheData[setNum][LRUInd] = programFlow.get(i);
+                cacheAge[setNum][LRUInd]++;
+                numOfCacheMiss++;
+            }
         }
+    }
+
+    private int getLRUBlockIndex(int setNum) {
+        int minIndex = 0;
+        for (int i = 1; i < cacheAge[setNum].length; i++) {
+            if (cacheAge[setNum][i] < cacheAge[setNum][minIndex]) {
+                minIndex = i;
+            }
+        }
+
+        return minIndex;
+    }
+
+    private int findCacheData(String data, int setNum) {
+
+        for (int i = 0; i < cacheData[setNum].length; i++)
+        {
+            if (cacheData[setNum][i].equals(data))
+                return i;
+        }
+
+        return -1;
     }
 
     public int getBlockSetAssociativeMapping(String input) {
@@ -107,7 +158,7 @@ public class Simulator {
         return 0;
     }
 
-    public int[][] getSnapshotOfCacheMemory() {
+    public String[][] getSnapshotOfCacheMemory() {
         return cacheData;
     }
 
