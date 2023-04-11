@@ -123,10 +123,7 @@ public class Simulator {
         int setNum = -1;
 
         if (inputType.equals("Blocks")) //TODO: change in frontend
-        {
             setNum = Integer.parseInt(input) % numOfCacheSets;
-            System.out.println(setNum);
-        }
 
         else if (inputType.equals("Addresses"))// if inputType.equals("word") --- address (hex) 
         {

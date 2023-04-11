@@ -1,9 +1,10 @@
 package src;
 
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.FileWriter;
 import java.io.IOException;
+import javax.swing.JFileChooser;
 
 public class Controller implements ActionListener {
     private final View view;
@@ -11,6 +12,7 @@ public class Controller implements ActionListener {
     private int missPenalty;
     private float aveMemoryAccessTime;
     private int totalMemoryAccessTime;
+    private String[][] outputTable;
 
     public Controller (View view) {
         this.view = view;
@@ -27,7 +29,6 @@ public class Controller implements ActionListener {
         }
     }
 
-    // TODO: I think we may need to reset the simulator bc it will just append if "simulate" is pressed again
     private void simulate () {
         int cacheMemorySize = Integer.parseInt(view.getCacheSize());
         int mainMemorySize = Integer.parseInt(view.getMMSize());
@@ -42,7 +43,6 @@ public class Controller implements ActionListener {
         String addressType = view.getAddressType();
         String inputType = view.getInputType();
 
-        // TODO: Figure out how to pass appropriate arraylist type depending on the addressType
         ArrayList<String> programFlow;
 
         if (cacheSizeType.equals("Blocks"))
@@ -51,9 +51,9 @@ public class Controller implements ActionListener {
         if (mmSizeType.equals("Blocks"))
             mainMemorySize *= blockSize;
 
-        //if (addressType.equals("Contiguous"))
-        //    programFlow = view.getProgramFlowContiguous();
-        //else
+        if (addressType.equals("Contiguous"))
+            programFlow = convertContiguousProgramFlow(view.getProgramFlowContiguous());
+        else
             programFlow = view.getProgramFlowNonContiguous();
 
         this.simulator = new Simulator(blockSize, setSize, mainMemorySize, cacheMemorySize, programFlow, inputType);
@@ -67,23 +67,17 @@ public class Controller implements ActionListener {
         view.addColsToTable(colNames);
 
         String[][] snapshot = simulator.getSnapshotOfCacheMemory();
-        String[][] display = new String[snapshot.length][snapshot[0].length + 1];
+        this.outputTable = new String[snapshot.length][snapshot[0].length + 1];
 
-        for (int i = 0 ; i < snapshot.length ; i++) {
-            for (int j = 0; j < snapshot[i].length; j++)
-                System.out.print(snapshot[i][j] + " ");
-            System.out.println();
-        }
-
-        for (int i = 0 ; i < display.length ; i++) {
-            for (int j = 0; j < display[i].length; j++)
+        for (int i = 0 ; i < outputTable.length ; i++) {
+            for (int j = 0; j < outputTable[i].length; j++)
                 if (j == 0)
-                    display[i][j] = String.valueOf(i);
+                    outputTable[i][j] = String.valueOf(i);
                 else
-                    display[i][j] = snapshot[i][j - 1];
+                    outputTable[i][j] = snapshot[i][j - 1];
         }
 
-        view.setTable(display);
+        view.setTable(outputTable);
         view.setCacheHits(simulator.getNumOfCacheHit());
         view.setCacheMisses(simulator.getNumOfCacheMiss());
 
@@ -98,15 +92,20 @@ public class Controller implements ActionListener {
     }
 
     private void saveToTextFile () { // TODO: Should we show a dialog box upon successful export?
-        try {
-            FileWriter writer = new FileWriter("output.txt");
-            String stringToWrite = "CACHE SIMULATOR OUTPUT - BSA / LRU\n" +
-                    "Cache Memory Snapshot: \n" +   // TODO: Export cache snapshot array
-                    "Cache Hits: " + simulator.getNumOfCacheHit() + "\n" +
-                    "Cache Misses: " + simulator.getNumOfCacheMiss() + "\n" +
-                    "Miss Penalty: " + missPenalty + "\n" +
-                    "Average Memory Access Time: " + aveMemoryAccessTime + "\n" +
-                    "Total Memory Access Time: " + totalMemoryAccessTime + "\n";
+        try { // TODO: Export cache snapshot array
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fileChooser.showSaveDialog(null);
+
+            String filename = fileChooser.getSelectedFile()+"\\" + "BSA_LRU_Cache_Simulator_Output.txt";
+            FileWriter writer = new FileWriter(filename);
+            String stringToWrite = "CACHE SIMULATOR OUTPUT - BSA / LRU\n\n" +
+                    "Cache Memory Snapshot:\n" + writeOutputTable() + "\n\n" +
+                    "Cache Hits: " + simulator.getNumOfCacheHit() + "\n\n" +
+                    "Cache Misses: " + simulator.getNumOfCacheMiss() + "\n\n" +
+                    "Miss Penalty: " + missPenalty + "\n\n" +
+                    "Average Memory Access Time: " + aveMemoryAccessTime + "\n\n" +
+                    "Total Memory Access Time: " + totalMemoryAccessTime + "\n\n";
 
             writer.write(stringToWrite);
             writer.close();
@@ -115,5 +114,27 @@ public class Controller implements ActionListener {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+    }
+
+    private ArrayList<String> convertContiguousProgramFlow (ArrayList<String[]> programFlow) {
+        ArrayList<String> result;
+
+        return result;
+    }
+
+    private String writeOutputTable () {
+        StringBuilder outputString = new StringBuilder("SET\t\t");
+
+        for (int i = 1 ; i < outputTable.length - 1 ; i++)
+            outputString.append("BLOCK ").append(i - 1).append("\t");
+
+        outputString.append("\n");
+
+        for (String[] rows : outputTable) {
+            for (String string : rows) outputString.append(string).append("\t\t");
+            outputString.append("\n");
+        }
+
+        return outputString.toString();
     }
 }

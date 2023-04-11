@@ -483,7 +483,6 @@ public class View extends JFrame{
         String text = taProgramFlow.getText();
         String[] text_split = text.split("\n");
         ArrayList<String> text_list = new ArrayList<>(Arrays.asList(text_split));
-        System.out.println(text_list);
         return text_list;
     }
 
