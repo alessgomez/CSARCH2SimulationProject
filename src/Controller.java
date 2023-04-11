@@ -21,8 +21,8 @@ public class Controller implements ActionListener {
 
     public void actionPerformed (ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "Clear" -> {view.clearInput(); view.hideOutput();}
-            case "Simulate" -> simulate();
+            case "Clear" -> {view.clearInput(); view.hideOutput(); view.resetTable();}
+            case "Simulate" -> {view.resetTable(); simulate();}
             case "Save to Text File" -> saveToTextFile();
         }
     }
@@ -59,20 +59,31 @@ public class Controller implements ActionListener {
         this.simulator = new Simulator(blockSize, setSize, mainMemorySize, cacheMemorySize, programFlow, inputType);
         simulator.simulate();
 
+        String[] colNames = new String[setSize];
+
+        for (int i = 0 ; i < colNames.length ; i++)
+            colNames[i] = "Block " + i;
+
+        view.addColsToTable(colNames);
 
         String[][] snapshot = simulator.getSnapshotOfCacheMemory();
-        int[][] age = simulator.getCacheMemoryAge();
+        String[][] display = new String[snapshot.length][snapshot[0].length + 1];
 
-        for (int i = 0; i < snapshot.length; i++)
-        {
+        for (int i = 0 ; i < snapshot.length ; i++) {
             for (int j = 0; j < snapshot[i].length; j++)
-                System.out.print(snapshot[i][j] + ": " + age[i][j] + " ");
-
+                System.out.print(snapshot[i][j] + " ");
             System.out.println();
         }
 
+        for (int i = 0 ; i < display.length ; i++) {
+            for (int j = 0; j < display[i].length; j++)
+                if (j == 0)
+                    display[i][j] = String.valueOf(i);
+                else
+                    display[i][j] = snapshot[i][j - 1];
+        }
 
-        view.setTable(simulator.getSnapshotOfCacheMemory());
+        view.setTable(display);
         view.setCacheHits(simulator.getNumOfCacheHit());
         view.setCacheMisses(simulator.getNumOfCacheMiss());
 

@@ -508,9 +508,13 @@ public class View extends JFrame{
     }
 
     public void addColsToTable(String[] colNames) {
-        for (int i = 0; i < colNames.length; i++)
-            tblModel.addColumn(colNames[i]);
+        for (String colName : colNames) tblModel.addColumn(colName);
+    }
 
+    public void resetTable() {
+        tblModel.setRowCount(0);
+        tblModel.setColumnCount(0);
+        tblModel.addColumn("Set");
     }
 
     public void setCacheHits(int res){lblCacheHitsRes.setText(String.valueOf(res));}
