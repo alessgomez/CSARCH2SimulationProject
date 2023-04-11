@@ -21,7 +21,7 @@ public class Controller implements ActionListener {
 
     public void actionPerformed (ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "Clear" -> view.clearInput();
+            case "Clear" -> {view.clearInput(); view.hideOutput();}
             case "Simulate" -> simulate();
             case "Save to Text File" -> saveToTextFile();
         }
@@ -58,6 +58,20 @@ public class Controller implements ActionListener {
 
         this.simulator = new Simulator(blockSize, setSize, mainMemorySize, cacheMemorySize, programFlow, inputType);
         simulator.simulate();
+
+
+        String[][] snapshot = simulator.getSnapshotOfCacheMemory();
+        int[][] age = simulator.getCacheMemoryAge();
+
+        for (int i = 0; i < snapshot.length; i++)
+        {
+            for (int j = 0; j < snapshot[i].length; j++)
+                System.out.print(snapshot[i][j] + ": " + age[i][j] + " ");
+
+            System.out.println();
+        }
+
+
         view.setTable(simulator.getSnapshotOfCacheMemory());
         view.setCacheHits(simulator.getNumOfCacheHit());
         view.setCacheMisses(simulator.getNumOfCacheMiss());

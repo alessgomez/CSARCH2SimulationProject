@@ -386,7 +386,7 @@ public class View extends JFrame{
 
         // Hide Output
         hideOutput();
-
+        tblSnapshot.getTableHeader().setReorderingAllowed(false);
         setVisible(true);
     }
 

@@ -69,7 +69,7 @@ public class Simulator {
 
             if (dataInd != -1)
             {
-                cacheAge[setNum][dataInd]++;
+                cacheAge[setNum][dataInd] = getLatestCacheAge(setNum);
                 numOfCacheHits++;
             }
 
@@ -77,10 +77,22 @@ public class Simulator {
             {
                 LRUInd = getLRUBlockIndex(setNum);
                 cacheData[setNum][LRUInd] = programFlow.get(i);
-                cacheAge[setNum][LRUInd]++;
+                cacheAge[setNum][LRUInd] = getLatestCacheAge(setNum);
                 numOfCacheMiss++;
             }
         }
+    }
+
+    private int getLatestCacheAge(int setNum) {
+        int maxAge = cacheAge[setNum][0];
+
+        for (int i = 1; i < cacheAge[setNum].length; i++)
+        {
+            if (cacheAge[setNum][i] > maxAge)
+                maxAge = cacheAge[setNum][i];
+        }
+
+        return maxAge + 1;
     }
 
     private int getLRUBlockIndex(int setNum) {
@@ -108,14 +120,15 @@ public class Simulator {
     }
 
     public int getBlockSetAssociativeMapping(String input) {
-        int setNum;
+        int setNum = -1;
 
-        if (inputType.equals("block")) //TODO: change in frontend
+        if (inputType.equals("Blocks")) //TODO: change in frontend
         {
             setNum = Integer.parseInt(input) % numOfCacheSets;
+            System.out.println(setNum);
         }
 
-        else // if inputType.equals("word") --- address (hex) 
+        else if (inputType.equals("Addresses"))// if inputType.equals("word") --- address (hex) 
         {
             int decAddress = Integer.parseInt(input, 16);
             String binAddress = Integer.toBinaryString(decAddress);
@@ -128,7 +141,7 @@ public class Simulator {
 
             setNum = Integer.parseInt(setNumBinStr, 2);
         }
-
+        
         return setNum;
     }
 
@@ -162,5 +175,9 @@ public class Simulator {
 
     public String[][] getSnapshotOfCacheMemory() {
         return cacheData;
+    }
+
+    public int[][] getCacheMemoryAge() { //TODO: DELETE
+        return cacheAge;
     }
 }
