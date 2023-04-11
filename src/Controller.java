@@ -9,9 +9,9 @@ import javax.swing.JFileChooser;
 public class Controller implements ActionListener {
     private final View view;
     private Simulator simulator;
-    private int missPenalty;
+    private float missPenalty;
     private float aveMemoryAccessTime;
-    private int totalMemoryAccessTime;
+    private float totalMemoryAccessTime;
     private String[][] outputTable;
 
     public Controller (View view) {

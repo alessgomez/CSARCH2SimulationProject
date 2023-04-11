@@ -520,10 +520,10 @@ public class View extends JFrame{
 
     public void setCacheMisses(int res) {lblCacheMissesRes.setText(String.valueOf(res));}
 
-    public void setMissPenalty(int res) {lblMissPenaltyRes.setText(String.valueOf(res));}
+    public void setMissPenalty(float res) {lblMissPenaltyRes.setText(String.valueOf(res));}
 
     public void setAveMemAccTime(float res) {lblAveMemAccTimeRes.setText(String.valueOf(res));}
 
-    public void setTotalMemAccTime(int res) {lblTotalMemAccTimeRes.setText(String.valueOf(res));}
+    public void setTotalMemAccTime(float res) {lblTotalMemAccTimeRes.setText(String.valueOf(res));}
 
 }
