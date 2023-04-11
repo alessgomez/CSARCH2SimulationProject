@@ -17,6 +17,7 @@ public class Simulator {
     private int numOfTagBits;
     private int numOfSetBits;
     private int numOfWordBits;
+    private int totalNumOfBits;
 
     public Simulator(int blockSize, int setSize, int mainMemorySize, int cacheMemorySize, ArrayList<String> programFlow, String inputType) {
         this.blockSize = blockSize;
@@ -43,7 +44,7 @@ public class Simulator {
     }
 
     private void partitionMainMemoryAddress() {
-        int totalNumOfBits = log2(mainMemorySize);
+        this.totalNumOfBits = log2(mainMemorySize);
 
         numOfWordBits = log2(blockSize);
         numOfSetBits = log2(numOfCacheSets);
@@ -112,8 +113,10 @@ public class Simulator {
         {
             if (cacheData[setNum][i] == null)
                 return -1;
-            else if (cacheData[setNum][i].equals(data))
+            else if (cacheData[setNum][i].equals(data)) {
+                System.out.println(cacheData[setNum][i] + " " + data);
                 return i;
+            }
         }
 
         return -1;
@@ -124,12 +127,15 @@ public class Simulator {
 
         if (inputType.equals("Blocks")) //TODO: change in frontend
             setNum = Integer.parseInt(input) % numOfCacheSets;
-
         else if (inputType.equals("Addresses"))// if inputType.equals("word") --- address (hex) 
         {
             int decAddress = Integer.parseInt(input, 16);
             String binAddress = Integer.toBinaryString(decAddress);
             String setNumBinStr = "";
+
+            while (binAddress.length() < totalNumOfBits) {
+                binAddress = "0" + binAddress;
+            }
             
             for (int i = 0; i < numOfSetBits; i++)
             {

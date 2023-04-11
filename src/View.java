@@ -473,6 +473,7 @@ public class View extends JFrame{
         String[] text_split = text.split("\n");
         ArrayList<String[]> text_list = new ArrayList<>();
         for (int i = 0; i < text_split.length; i++) {
+            text_split[i] = text_split[i].replaceFirst("^\\s*", "");
             String[] word_split = text_split[i].split("\\s+");
             text_list.add(word_split);
         }
