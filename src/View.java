@@ -513,7 +513,7 @@ public class View extends JFrame{
 
     public void setMissPenalty(int res) {lblMissPenaltyRes.setText(String.valueOf(res));}
 
-    public void setAveMemAccTime(int res) {lblAveMemAccTimeRes.setText(String.valueOf(res));}
+    public void setAveMemAccTime(float res) {lblAveMemAccTimeRes.setText(String.valueOf(res));}
 
     public void setTotalMemAccTime(int res) {lblTotalMemAccTimeRes.setText(String.valueOf(res));}
 

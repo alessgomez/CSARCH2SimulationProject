@@ -28,7 +28,7 @@ public class Simulator {
         this.numOfCacheMiss = 0;
         numOfCacheSets = cacheMemorySize / blockSize / setSize; 
         this.cacheData = new String[numOfCacheSets][setSize]; //TODO: might change to arraylist of objects
-        this.cacheAge = new int[numOfCacheSets][setSize]; 
+        this.cacheAge = new int[numOfCacheSets][setSize];
         this.inputType = inputType;
         partitionMainMemoryAddress();
         initializeCacheAge();
@@ -98,7 +98,9 @@ public class Simulator {
 
         for (int i = 0; i < cacheData[setNum].length; i++)
         {
-            if (cacheData[setNum][i].equals(data))
+            if (cacheData[setNum][i] == null)
+                return -1;
+            else if (cacheData[setNum][i].equals(data))
                 return i;
         }
 
@@ -115,7 +117,7 @@ public class Simulator {
 
         else // if inputType.equals("word") --- address (hex) 
         {
-            int decAddress = Integer.parseInt(input);
+            int decAddress = Integer.parseInt(input, 16);
             String binAddress = Integer.toBinaryString(decAddress);
             String setNumBinStr = "";
             
@@ -146,21 +148,19 @@ public class Simulator {
         return numOfCacheMiss;
     }
 
-    public int getMissPenalty() { //TODO: add formula 
+    public int getMissPenalty(String readType, int cacheAccessTime, int memoryAccessTime) { //TODO: add formula
         return 0;
     }
 
-    public float getAverageMemoryAccessTime() { //TODO: add formula 
+    public float getAverageMemoryAccessTime(String readType, int cacheAccessTime, int memoryAccessTime) { //TODO: add formula
         return 0;
     }
 
-    public int totalMemoryAccessTime() { //TODO: add formula 
+    public int totalMemoryAccessTime(String readType, int cacheAccessTime, int memoryAccessTime) { //TODO: add formula
         return 0;
     }
 
     public String[][] getSnapshotOfCacheMemory() {
         return cacheData;
     }
-
-    //TODO: With option to output result in text file function
 }
