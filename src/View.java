@@ -290,7 +290,7 @@ public class View extends JFrame{
         pnlRight.add(lblOutput);
 
         // snapshot
-        String[] colNames = {"Set", "Block", "Data"};
+        String[] colNames = {"Set"};
 
         tblModel = new DefaultTableModel(colNames, 0);
         tblSnapshot = new JTable(tblModel);
@@ -505,6 +505,12 @@ public class View extends JFrame{
 
     public void setTable(int[][] cacheSnapshot){
         for (int[] values : cacheSnapshot) addRowToTable(values);
+    }
+
+    public void addColsToTable(String[] colNames) {
+        for (int i = 0; i < colNames.length; i++)
+            tblModel.addColumn(colNames[i]);
+
     }
 
     public void setCacheHits(int res){lblCacheHitsRes.setText(String.valueOf(res));}
