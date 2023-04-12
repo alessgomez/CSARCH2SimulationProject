@@ -91,7 +91,7 @@ public class Controller implements ActionListener {
                 String[] colNames = new String[setSize];
 
                 for (int i = 0; i < colNames.length; i++)
-                    colNames[i] = "Block " + i;
+                    colNames[i] = "B" + i;
 
                 view.addColsToTable(colNames);
 
@@ -125,9 +125,17 @@ public class Controller implements ActionListener {
                     "BSA-LRU Cache Simulator", JOptionPane.ERROR_MESSAGE);
     }
 
-    private void addContiguousDataToProgramFlow(int start, int end, ArrayList<String> result) {
-        for (int i = start; i <= end; i++)
-            result.add(Integer.toHexString(i));
+    private void addContiguousDataToProgramFlow(int start, int end, ArrayList<String> result, int radix) {
+        if (radix == 16)
+        {
+            for (int i = start; i <= end; i++)
+                result.add(Integer.toHexString(i));
+        }
+        else {
+            for (int i = start; i <= end; i++)
+                result.add(Integer.toString(i));
+        }
+
     }
 
     private int recursion(int rowNum) {
@@ -138,7 +146,10 @@ public class Controller implements ActionListener {
             String[] row = programFlowContig.get(rowNum);
             switch(row[0]) {
                 case "RANGE":
-                    addContiguousDataToProgramFlow(Integer.parseInt(row[1], 16), Integer.parseInt(row[2], 16), result);
+                    int radix = 10;
+                    if (view.getInputType().equals("Addresses"))
+                        radix = 16;
+                    addContiguousDataToProgramFlow(Integer.parseInt(row[1], radix), Integer.parseInt(row[2], radix), result, radix);
                     return recursion(rowNum+1);
 
                 case "LOOP":
@@ -169,9 +180,9 @@ public class Controller implements ActionListener {
                     "Cache Memory Snapshot:\n" + writeOutputTable() + "\n" +
                     "Cache Hits: " + simulator.getNumOfCacheHit() + "\n\n" +
                     "Cache Misses: " + simulator.getNumOfCacheMiss() + "\n\n" +
-                    "Miss Penalty: " + missPenalty + "\n\n" +
-                    "Average Memory Access Time: " + aveMemoryAccessTime + "\n\n" +
-                    "Total Memory Access Time: " + totalMemoryAccessTime;
+                    "Miss Penalty: " + missPenalty + " ns\n\n" +
+                    "Average Memory Access Time: " + aveMemoryAccessTime + " ns\n\n" +
+                    "Total Memory Access Time: " + totalMemoryAccessTime + " ns";
 
             writer.write(stringToWrite);
             writer.close();

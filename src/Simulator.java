@@ -127,7 +127,7 @@ public class Simulator {
 
         if (inputType.equals("Blocks")) //TODO: change in frontend
             setNum = Integer.parseInt(input) % numOfCacheSets;
-        else if (inputType.equals("Addresses"))// if inputType.equals("word") --- address (hex) 
+        else if (inputType.equals("Addresses")) // TODO: Should we accept decimal addresses? (reason: problem set)
         {
             int decAddress = Integer.parseInt(input, 16);
             String binAddress = Integer.toBinaryString(decAddress);
@@ -164,34 +164,35 @@ public class Simulator {
         return numOfCacheMiss;
     }
 
-    public float getMissPenalty(String readType, int cacheAccessTime, int memoryAccessTime) { //TODO: add formula
+    public float getMissPenalty(String readType, int cacheAccessTime, int memoryAccessTime) {
         if (readType.equals("Non Load-Through"))
         {
-            return 1 + memoryAccessTime * blockSize + cacheAccessTime;
+            return cacheAccessTime + memoryAccessTime * blockSize + cacheAccessTime;
         }
         else if (readType.equals("Load-Through"))
         {
-            return 1 + memoryAccessTime;
+            return cacheAccessTime + memoryAccessTime;
         }
         return 0;
     }
 
-    public float getAverageMemoryAccessTime(String readType, int cacheAccessTime, int memoryAccessTime) { //TODO: add formula
-        float hitrate = numOfCacheHits / (numOfCacheHits + numOfCacheMiss);
-        return (hitrate * cacheAccessTime) + ((1 - hitrate) * getMissPenalty(readType, cacheAccessTime, memoryAccessTime));
+    public float getAverageMemoryAccessTime(String readType, int cacheAccessTime, int memoryAccessTime) {
+        float hitrate = (float) numOfCacheHits / (numOfCacheHits + numOfCacheMiss);
+        return Math.round((hitrate * cacheAccessTime) + ((1 - hitrate) * getMissPenalty(readType, cacheAccessTime, memoryAccessTime)));
+
     }
 
-    public float totalMemoryAccessTime(String readType, int cacheAccessTime, int memoryAccessTime) { //TODO: add formula
+    public float totalMemoryAccessTime(String readType, int cacheAccessTime, int memoryAccessTime) {
         float hits = numOfCacheHits * blockSize * cacheAccessTime;
-        float miss = numOfCacheMiss * (cacheAccessTime + (memoryAccessTime * blockSize) + (cacheAccessTime * blockSize));
+        float miss = 0;
+        if (readType.equals("Non Load-Through"))
+            miss = numOfCacheMiss * (cacheAccessTime + (memoryAccessTime * blockSize) + (cacheAccessTime * blockSize));
+        else if (readType.equals("Load-Through"))
+            miss = numOfCacheMiss * (cacheAccessTime + memoryAccessTime);
         return hits + miss;
     }
 
     public String[][] getSnapshotOfCacheMemory() {
         return cacheData;
-    }
-
-    public int[][] getCacheMemoryAge() { //TODO: DELETE
-        return cacheAge;
     }
 }

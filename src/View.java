@@ -76,7 +76,7 @@ public class View extends JFrame{
 
     public View () {
         setTitle("CSARCH2 Simulation Project");
-        setSize(1230, 750);
+        setSize(1250, 750);
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -89,7 +89,7 @@ public class View extends JFrame{
 
         //Title Panel
         pnlTitle = new JPanel();
-        pnlTitle.setBounds(0, 0, 1230, 60);
+        pnlTitle.setBounds(0, 0, 1250, 60);
         pnlTitle.setBackground(Color.decode("#112341"));
         pnlTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(pnlTitle);
@@ -103,7 +103,7 @@ public class View extends JFrame{
 
         // Bottom Panel
         pnlBottom = new JPanel();
-        pnlBottom.setBounds(0, 690, 1230, 40);
+        pnlBottom.setBounds(0, 690, 1250, 40);
         pnlBottom.setBackground(Color.decode("#112341"));
         pnlBottom.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(pnlBottom);
@@ -521,10 +521,10 @@ public class View extends JFrame{
 
     public void setCacheMisses(int res) {lblCacheMissesRes.setText(String.valueOf(res));}
 
-    public void setMissPenalty(float res) {lblMissPenaltyRes.setText(String.valueOf(res));}
+    public void setMissPenalty(float res) {lblMissPenaltyRes.setText(String.valueOf(res) + " ns");}
 
-    public void setAveMemAccTime(float res) {lblAveMemAccTimeRes.setText(String.valueOf(res));}
+    public void setAveMemAccTime(float res) {lblAveMemAccTimeRes.setText(String.valueOf(res) + " ns");}
 
-    public void setTotalMemAccTime(float res) {lblTotalMemAccTimeRes.setText(String.valueOf(res));}
+    public void setTotalMemAccTime(float res) {lblTotalMemAccTimeRes.setText(String.valueOf(res) + " ns");}
 
 }
