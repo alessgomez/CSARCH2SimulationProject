@@ -33,6 +33,8 @@ public class Simulator {
         this.inputType = inputType;
         partitionMainMemoryAddress();
         initializeCacheAge();
+        System.out.println("set: " + numOfSetBits);
+        System.out.println("word: "+ numOfWordBits);
     }
 
     private void initializeCacheAge() {
@@ -66,7 +68,8 @@ public class Simulator {
                 // Step 2.1: If yes, increase the age ONLY; Cache hit +=1
                 // Step 2.2: Else, find the index of SMALLEST age, change the data in that index and increment the CURRENT AGE; Cache miss += 1 
             setNum = getBlockSetAssociativeMapping(programFlow.get(i));
-            dataInd = findCacheData(programFlow.get(i), setNum);
+
+            dataInd = findCacheData(programFlow.get(i), setNum); //change implementation for word
 
             if (dataInd != -1)
             {
@@ -77,11 +80,24 @@ public class Simulator {
             else 
             {
                 LRUInd = getLRUBlockIndex(setNum);
-                cacheData[setNum][LRUInd] = programFlow.get(i);
+                if (inputType.equals("Blocks"))
+                    cacheData[setNum][LRUInd] = programFlow.get(i);
+                else 
+                    cacheData[setNum][LRUInd] = getBlockBaseAddress(programFlow.get(i));
                 cacheAge[setNum][LRUInd] = getLatestCacheAge(setNum);
                 numOfCacheMiss++;
             }
         }
+    }
+
+    private String getBlockBaseAddress(String word) {
+        
+        int wordInt = Integer.parseInt(word, 16);
+        while (wordInt % blockSize != 0)
+        {
+            wordInt--;
+        }
+        return Integer.toHexString(wordInt);
     }
 
     private int getLatestCacheAge(int setNum) {
@@ -109,12 +125,16 @@ public class Simulator {
 
     private int findCacheData(String data, int setNum) {
 
+        if (inputType.equals("Addresses"))
+        {
+            data = getBlockBaseAddress(data);
+        }
+
         for (int i = 0; i < cacheData[setNum].length; i++)
         {
             if (cacheData[setNum][i] == null)
                 return -1;
             else if (cacheData[setNum][i].equals(data)) {
-                System.out.println(cacheData[setNum][i] + " " + data);
                 return i;
             }
         }
