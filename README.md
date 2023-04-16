@@ -104,7 +104,7 @@ Users will be prompted to choose the directory where they want to save the text 
 - **Miss Penalty**: 42.0 ns
 - **Average Memory Access Time**: 32.0 ns
 - **Total Memory Access Time**: 417.0 ns
-
+---
 ### Cache Problem Set #5
 #### Input
 - **Cache Memory Size**: 4 Blocks
@@ -133,7 +133,7 @@ Users will be prompted to choose the directory where they want to save the text 
 - **Miss Penalty**: 42.0 ns
 - **Average Memory Access Time**: 32.0 ns
 - **Total Memory Access Time**: 278.0 ns
-
+---
 ### Cache Problem Set #6
 #### Input
 - **Cache Memory Size**: 4096 Words
@@ -157,7 +157,7 @@ Users will be prompted to choose the directory where they want to save the text 
 - **Miss Penalty**: 642.0 ns
 - **Average Memory Access Time**: 11.0 ns
 - **Total Memory Access Time**: 1.276046E7 ns
-
+---
 ### Cache Problem Set #7
 #### Input
 - **Cache Memory Size**: 1024 Words
