@@ -69,7 +69,7 @@ For contiguous data, program flow inputs can use the following keywords to group
 **NOTE:** Inputs that do not follow the syntax may lead to either an invalid program flow error or a simulation error.
 
 ### Text File Exporting
-Users will be prompted to choose the directory where they want to save the text file to. The text file is named `BSA_LRU_Cache_Simulator_Output.txt`, 
+Users will be prompted to choose the directory where they want to save the text file to. The text file is named `BSA_LRU_Cache_Simulator_Output.txt`, and will contain all the simulator results stated in the preview section of the manual.
 
 ## Sample Test Cases 
 ### Cache Problem Set #4
