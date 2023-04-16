@@ -32,11 +32,11 @@ To simulate the Cache Memory BSA/LRU algorithm, the application takes the follow
 ### Simulator Results
 After running the simulation, the application displays the following outputs:
 - **Cache Memory Snapshot**: a two-dimensional table that depicts the values inside each block for each set after the simulation is finished
-- **Number of Cache Hits**
-- **Number of Cache Misses**
-- **Miss Penalty**
-- **Average Memory Access Time**
-- **Total Memory Access Time**
+- **Number of Cache Hits**: positive integer
+- **Number of Cache Misses**: positive integer
+- **Miss Penalty**: positive float
+- **Average Memory Access Time**: positive float
+- **Total Memory Access Time**: positive float
 
 ## How to Use the Simulator
 ### Starting the Application
@@ -50,7 +50,7 @@ To ensure correct results, the program flow input must adhere to the following s
 
 For contiguous data, program flow inputs can use the following keywords to group addresses or blocks:
 - `RANGE <v1> <v2>`
-  - Enters all values from `v1` to `v2`, inclusive, into the program flow once.
+  - Enters all values from *v1* to *v2*, inclusive, into the program flow once.
   - *v1* and *v2* should be positive integers were v1 is less than v2.
   - ex. `RANGE 5 11` places 5, 6, 7, 8, 9, 10, 11 into the program flow
 - `LOOP <label> <count>` and `J <label>`
@@ -69,7 +69,7 @@ For contiguous data, program flow inputs can use the following keywords to group
 **NOTE:** Inputs that do not follow the syntax may lead to either an invalid program flow error or a simulation error.
 
 ### Text File Exporting
-Users will be prompted to choose the directory where they want to save the text file to. The text file is named `BSA_LRU_Cache_Simulator_Output.txt`, 
+Users will be prompted to choose the directory where they want to save the text file to. The text file is named `BSA_LRU_Cache_Simulator_Output.txt`, and will contain all the simulator results stated in the preview section of the manual.
 
 ## Sample Test Cases 
 ### Cache Problem Set #4
