@@ -184,7 +184,7 @@ public class Simulator {
         return numOfCacheMiss;
     }
 
-    public float getMissPenalty(String readType, int cacheAccessTime, int memoryAccessTime) {
+    public float getMissPenalty(String readType, float cacheAccessTime, float memoryAccessTime) {
         if (readType.equals("Non Load-Through"))
         {
             return cacheAccessTime + memoryAccessTime * blockSize + cacheAccessTime;
@@ -196,13 +196,13 @@ public class Simulator {
         return 0;
     }
 
-    public float getAverageMemoryAccessTime(String readType, int cacheAccessTime, int memoryAccessTime) {
+    public float getAverageMemoryAccessTime(String readType, float cacheAccessTime, float memoryAccessTime) {
         float hitrate = (float) numOfCacheHits / (numOfCacheHits + numOfCacheMiss);
         return Math.round((hitrate * cacheAccessTime) + ((1 - hitrate) * getMissPenalty(readType, cacheAccessTime, memoryAccessTime)));
 
     }
 
-    public float totalMemoryAccessTime(String readType, int cacheAccessTime, int memoryAccessTime) {
+    public float totalMemoryAccessTime(String readType, float cacheAccessTime, float memoryAccessTime) {
         float hits = numOfCacheHits * blockSize * cacheAccessTime;
         float miss = 0;
         if (readType.equals("Non Load-Through"))

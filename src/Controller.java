@@ -8,8 +8,8 @@ import javax.swing.*;
 public class Controller implements ActionListener {
     private final View view;
     private Simulator simulator;
-    private boolean allOutputsIntegers;
-    private boolean allOutputsPositive;
+    private boolean allInputsIntegers;
+    private boolean allInputsPositive;
     private float missPenalty;
     private float aveMemoryAccessTime;
     private float totalMemoryAccessTime;
@@ -39,28 +39,45 @@ public class Controller implements ActionListener {
             integerValue = Integer.parseInt(inputValue);
 
             if (integerValue <= 0)
-                allOutputsPositive = false;
+                allInputsPositive = false;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR: Invalid input in " + fieldName + ".",
                     "BSA-LRU Cache Simulator", JOptionPane.ERROR_MESSAGE);
-            allOutputsIntegers = false;
+            allInputsIntegers = false;
         }
 
         return integerValue;
     }
 
+    private float validateFloat (String inputValue, String fieldName) {
+        float floatValue = 0;
+
+        try {
+            floatValue = Float.parseFloat(inputValue);
+
+            if (floatValue <= 0.0)
+                allInputsPositive = false;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR: Invalid input in " + fieldName + ".",
+                    "BSA-LRU Cache Simulator", JOptionPane.ERROR_MESSAGE);
+            allInputsIntegers = false;
+        }
+
+        return floatValue;
+    }
+
     private void simulate () {
-        allOutputsIntegers = true;
-        allOutputsPositive = true;
+        allInputsIntegers = true;
+        allInputsPositive = true;
 
         int cacheMemorySize = validateInput(view.getCacheSize(), "Cache Size");
         int mainMemorySize = validateInput(view.getMMSize(), "Main Memory Size");
         int setSize = validateInput(view.getSetSize(), "Set Size");
         int blockSize = validateInput(view.getBlockSize(), "Block Size");
-        int cacheAccessTime = validateInput(view.getCacheAccTime(), "Cache Access Time");
-        int memoryAccessTime = validateInput(view.getMemoryAccTime(), "Memory Access Time");
+        float cacheAccessTime = validateFloat(view.getCacheAccTime(), "Cache Access Time");
+        float memoryAccessTime = validateFloat(view.getMemoryAccTime(), "Memory Access Time");
 
-        if (allOutputsIntegers && allOutputsPositive) {
+        if (allInputsIntegers && allInputsPositive) {
             String cacheSizeType = view.getCacheSizeType();
             String mmSizeType = view.getMMSizeType();
             String readType = view.getReadType();
@@ -86,41 +103,46 @@ public class Controller implements ActionListener {
                     mainMemorySize *= blockSize;
 
                 this.simulator = new Simulator(blockSize, setSize, mainMemorySize, cacheMemorySize, result, inputType);
-                simulator.simulate();
+                try {
+                    simulator.simulate();
 
-                String[] colNames = new String[setSize];
+                    String[] colNames = new String[setSize];
 
-                for (int i = 0; i < colNames.length; i++)
-                    colNames[i] = "B" + i;
+                    for (int i = 0; i < colNames.length; i++)
+                        colNames[i] = "B" + i;
 
-                view.addColsToTable(colNames);
+                    view.addColsToTable(colNames);
 
-                String[][] snapshot = simulator.getSnapshotOfCacheMemory();
-                this.outputTable = new String[snapshot.length][snapshot[0].length + 1];
+                    String[][] snapshot = simulator.getSnapshotOfCacheMemory();
+                    this.outputTable = new String[snapshot.length][snapshot[0].length + 1];
 
-                for (int i = 0; i < outputTable.length; i++) {
-                    for (int j = 0; j < outputTable[i].length; j++)
-                        if (j == 0)
-                            outputTable[i][j] = String.valueOf(i);
-                        else
-                            outputTable[i][j] = snapshot[i][j - 1];
+                    for (int i = 0; i < outputTable.length; i++) {
+                        for (int j = 0; j < outputTable[i].length; j++)
+                            if (j == 0)
+                                outputTable[i][j] = String.valueOf(i);
+                            else
+                                outputTable[i][j] = snapshot[i][j - 1];
+                    }
+
+                    view.setTable(outputTable);
+                    view.setCacheHits(simulator.getNumOfCacheHit());
+                    view.setCacheMisses(simulator.getNumOfCacheMiss());
+
+                    this.missPenalty = simulator.getMissPenalty(readType, cacheAccessTime, memoryAccessTime);
+                    this.aveMemoryAccessTime = simulator.getAverageMemoryAccessTime(readType, cacheAccessTime, memoryAccessTime);
+                    this.totalMemoryAccessTime = simulator.totalMemoryAccessTime(readType, cacheAccessTime, memoryAccessTime);
+
+                    view.setMissPenalty(missPenalty);
+                    view.setAveMemAccTime(aveMemoryAccessTime);
+                    view.setTotalMemAccTime(totalMemoryAccessTime);
+                    view.showOutput();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "ERROR: Simulation error.",
+                            "BSA-LRU Cache Simulator", JOptionPane.ERROR_MESSAGE);
                 }
-
-                view.setTable(outputTable);
-                view.setCacheHits(simulator.getNumOfCacheHit());
-                view.setCacheMisses(simulator.getNumOfCacheMiss());
-
-                this.missPenalty = simulator.getMissPenalty(readType, cacheAccessTime, memoryAccessTime);
-                this.aveMemoryAccessTime = simulator.getAverageMemoryAccessTime(readType, cacheAccessTime, memoryAccessTime);
-                this.totalMemoryAccessTime = simulator.totalMemoryAccessTime(readType, cacheAccessTime, memoryAccessTime);
-
-                view.setMissPenalty(missPenalty);
-                view.setAveMemAccTime(aveMemoryAccessTime);
-                view.setTotalMemAccTime(totalMemoryAccessTime);
-                view.showOutput();
             }
         }
-        else if (allOutputsIntegers)
+        else if (allInputsIntegers || (!allInputsIntegers && !allInputsPositive))
             JOptionPane.showMessageDialog(null, "ERROR: All inputs should be greater than 0.",
                     "BSA-LRU Cache Simulator", JOptionPane.ERROR_MESSAGE);
     }
