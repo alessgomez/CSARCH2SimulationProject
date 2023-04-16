@@ -5,13 +5,13 @@ import java.util.*;
 public class Simulator {
     private final int blockSize;
     private final int setSize;
-    private final int mainMemorySize; //in words
-    private final int cacheMemorySize; //in words
+    private final int mainMemorySize;
+    private final int cacheMemorySize;
     private final int numOfCacheSets;
     private final ArrayList<String> programFlow;
     private int numOfCacheHits;
     private int numOfCacheMiss;
-    private final String[][] cacheData; //TODO: edit
+    private final String[][] cacheData;
     private final int[][] cacheAge;
     private final String inputType;
     private int numOfTagBits;
@@ -28,7 +28,7 @@ public class Simulator {
         this.numOfCacheHits = 0;
         this.numOfCacheMiss = 0;
         numOfCacheSets = cacheMemorySize / blockSize / setSize; 
-        this.cacheData = new String[numOfCacheSets][setSize]; //TODO: might change to arraylist of objects
+        this.cacheData = new String[numOfCacheSets][setSize];
         this.cacheAge = new int[numOfCacheSets][setSize];
         this.inputType = inputType;
         partitionMainMemoryAddress();
@@ -63,13 +63,9 @@ public class Simulator {
         int LRUInd;
         for (int i = 0; i < programFlow.size(); i++)
         {
-            // Step 1: Get mapping 
-            // Step 2: Check if data is in cache already
-                // Step 2.1: If yes, increase the age ONLY; Cache hit +=1
-                // Step 2.2: Else, find the index of SMALLEST age, change the data in that index and increment the CURRENT AGE; Cache miss += 1 
             setNum = getBlockSetAssociativeMapping(programFlow.get(i));
 
-            dataInd = findCacheData(programFlow.get(i), setNum); //change implementation for word
+            dataInd = findCacheData(programFlow.get(i), setNum);
 
             if (dataInd != -1)
             {
@@ -145,9 +141,9 @@ public class Simulator {
     public int getBlockSetAssociativeMapping(String input) {
         int setNum = -1;
 
-        if (inputType.equals("Blocks")) //TODO: change in frontend
+        if (inputType.equals("Blocks"))
             setNum = Integer.parseInt(input) % numOfCacheSets;
-        else if (inputType.equals("Addresses")) // TODO: Should we accept decimal addresses? (reason: problem set)
+        else if (inputType.equals("Addresses"))
         {
             int decAddress = Integer.parseInt(input, 16);
             String binAddress = Integer.toBinaryString(decAddress);
@@ -166,14 +162,6 @@ public class Simulator {
         }
         
         return setNum;
-    }
-
-    String hexToBinary(String hex) {
-        int i = Integer.parseInt(hex, 16);
-        String bin = Integer.toBinaryString(i);
-        //retrieve only the set bits 
-        int j = Integer.parseInt(bin, 2);
-        return bin;
     }
 
     public int getNumOfCacheHit() {

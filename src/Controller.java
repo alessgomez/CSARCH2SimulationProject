@@ -182,7 +182,7 @@ public class Controller implements ActionListener {
                         currRow = recursion(rowNum+1);
                     }
                     return recursion(currRow+1);
-                case "J" : //assume nested loops (nearest J is end of the current loop)
+                case "J" :
                     return rowNum;
                 default:
                     return -1;

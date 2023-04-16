@@ -503,10 +503,6 @@ public class View extends JFrame{
         tblModel.addRow(rowString);
     }
 
-    public void setTable(int[][] cacheSnapshot){
-        for (int[] values : cacheSnapshot) addRowToTable(values);
-    }
-
     public void addColsToTable(String[] colNames) {
         for (String colName : colNames) tblModel.addColumn(colName);
     }
