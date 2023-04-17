@@ -32,8 +32,8 @@ To simulate the Cache Memory BSA/LRU algorithm, the application takes the follow
 ### Simulator Results
 After running the simulation, the application displays the following outputs:
 - **Cache Memory Snapshot**: a two-dimensional table that depicts the values inside each block for each set after the simulation is finished
-- **Number of Cache Hits**: positive integer
-- **Number of Cache Misses**: positive integer
+- **Number of Cache Hits**: positive integer; for this simulator, cache hits are counted **by address**
+- **Number of Cache Misses**: positive integer; for this simulator, cache misses are counted **by blocks**
 - **Miss Penalty**: positive float
 - **Average Memory Access Time**: positive float
 - **Total Memory Access Time**: positive float
@@ -98,7 +98,7 @@ Users will be prompted to choose the directory where they want to save the text 
   24C
   2F4
   ```
-#### Expected Output
+#### Output
 - **Cache Hits**: 3
 - **Cache Misses**: 9
 - **Miss Penalty**: 42.0 ns
@@ -127,7 +127,7 @@ Users will be prompted to choose the directory where they want to save the text 
   6
   3
   ```
-#### Expected Output
+#### Output
 - **Cache Hits**: 2
 - **Cache Misses**: 6
 - **Miss Penalty**: 42.0 ns
@@ -144,19 +144,19 @@ Users will be prompted to choose the directory where they want to save the text 
 - **Memory Access Time**: 10
 - **Read Type**: Non Load-Through
 - **Memory Type**: Contiguous
-- **Input Type**: Address
+- **Input Type**: Addresses
 - **Program Flow**:
   ```
   LOOP L1 10
-    RANGE 0 4351
+    RANGE 0 10FF
   J L1
   ```
-#### Expected Output
-- **Cache Hits**: 169640
-- **Cache Misses**: 2700
+#### Output
+- **Cache Hits**: 43272
+- **Cache Misses**: 248
 - **Miss Penalty**: 642.0 ns
-- **Average Memory Access Time**: 11.0 ns
-- **Total Memory Access Time**: 1.276046E7 ns
+- **Average Memory Access Time**: 5.0 ns
+- **Total Memory Access Time**: 2944248.0 ns
 ---
 ### Cache Problem Set #7
 #### Input
@@ -168,22 +168,22 @@ Users will be prompted to choose the directory where they want to save the text 
 - **Memory Access Time**: 10
 - **Read Type**: Non Load-Through
 - **Memory Type**: Contiguous
-- **Input Type**: Address
+- **Input Type**: Addresses
 - **Program Flow**:
   ```
-  RANGE 0 127
+  RANGE 0 7F
   LOOP L1 10
-     RANGE 128 255
+     RANGE 80 FF
      LOOP L2 20
-        RANGE 256 511
+        RANGE 100 1FF
      J L2
-     RANGE 512 1279
+     RANGE 200 4FF
   J L1
-  RANGE 1280 1535
+  RANGE 500 5FF
   ```
-#### Expected Output
-- **Cache Hits**: 177972
-- **Cache Misses**: 358
+#### Output
+- **Cache Hits**: 60487
+- **Cache Misses**: 57
 - **Miss Penalty**: 1282.0 ns
-- **Average Memory Access Time**: 4.0 ns
-- **Total Memory Access Time**: 2.3284838E7 ns
+- **Average Memory Access Time**: 2.0 ns
+- **Total Memory Access Time**: 7822649.0
